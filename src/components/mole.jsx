@@ -21,8 +21,10 @@ export default class MoleView extends React.Component {
 
     return (
       <button className={className} type="button" onClick={this.props.onClick}>
-        <span role="img" aria-label="Mole">
-          💣
+        <span className="mole__inner">
+          <span role="img" aria-label="Mole">
+            💣
+          </span>
         </span>
       </button>
     );

@@ -17,12 +17,12 @@ body {
 .moles {
   display: grid;
   font-size: calc(1.5rem + 2vw);
-  grid-gap: 0.5em;
+  grid-gap: 1em;
   grid-template-columns: 1fr 1fr 1fr;
   height: 90vw;
-  margin: 0 auto;
-  max-height: 50rem;
-  max-width: 50rem;
+  margin: 1rem auto 0;
+  max-height: 25em;
+  max-width: 25em;
   width: 90vw;
 }
 
@@ -42,6 +42,18 @@ body {
   display: none;
 }
 
-.mole--alive {
-  background-color: blue;
+.mole__inner {
+  display: inline-block;
+  height: 2em;
+  overflow: hidden;
+}
+
+.mole__inner span {
+  display: inline-block;
+  transform: translateY(2em);
+  transition: transform 0.25s ease-in-out;
+}
+
+.mole--alive .mole__inner span {
+  transform: translateY(0);
 }
