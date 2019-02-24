@@ -1,0 +1,47 @@
+body {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+.whack-a-mole--running .pause-button,
+.whack-a-mole--running .reset-button,
+.whack-a-mole--paused .start-button,
+.whack-a-mole--paused .reset-button,
+.whack-a-mole--pre_start .start-button {
+  display: inline-block;
+}
+
+.moles {
+  display: grid;
+  font-size: calc(1.5rem + 2vw);
+  grid-gap: 0.5em;
+  grid-template-columns: 1fr 1fr 1fr;
+  height: 90vw;
+  margin: 0 auto;
+  max-height: 50rem;
+  max-width: 50rem;
+  width: 90vw;
+}
+
+.mole,
+.reset-button,
+.start-button,
+.pause-button {
+  background-color: transparent;
+  border: 2px solid teal;
+  cursor: pointer;
+  font: inherit;
+}
+
+.reset-button,
+.start-button,
+.pause-button {
+  display: none;
+}
+
+.mole--alive {
+  background-color: blue;
+}
