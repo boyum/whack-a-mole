@@ -9,16 +9,16 @@ body {
 }
 
 .whack-a-mole--running .pause-button,
-.whack-a-mole--running .reset-button,
+.whack-a-mole--running .restart-button,
 .whack-a-mole--paused .start-button,
-.whack-a-mole--paused .reset-button,
-.whack-a-mole--pre_start .start-button {
+.whack-a-mole--paused .restart-button,
+.whack-a-mole--game_over .restart-button {
   display: inline-block;
 }
 
 .moles {
   display: grid;
-  font-size: calc(1.25rem + 1.5vw);
+  font-size: calc(1rem + 3vw);
   grid-gap: 0.75em;
   grid-template-columns: 1fr 1fr 1fr;
   height: 90vw;
@@ -29,7 +29,7 @@ body {
 }
 
 .mole,
-.reset-button,
+.restart-button,
 .start-button,
 .pause-button {
   background-color: transparent;
@@ -38,7 +38,7 @@ body {
   font: inherit;
 }
 
-.reset-button,
+.restart-button,
 .start-button,
 .pause-button {
   display: none;
@@ -58,4 +58,21 @@ body {
 
 .mole--alive .mole__inner span {
   transform: translateY(0);
+}
+
+.whack-a-mole--game_over .game-timer__container {
+  visibility: hidden;
+}
+
+.game-timer__inner {
+  background-color: teal;
+  height: 1rem;
+  margin: 0.5rem 0;
+  transform-origin: left center;
+  transition: transform 0.9s;
+}
+
+.score {
+  margin-top: 1rem;
+  text-align: center;
 }

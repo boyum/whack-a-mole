@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 export default class MoleView extends React.Component {
   static propTypes = {
     onClick: PropTypes.func.isRequired,
-    isAlive: PropTypes.bool.isRequired
+    isAlive: PropTypes.bool.isRequired,
+    icon: PropTypes.string.isRequired
   };
 
   constructor(props) {
@@ -23,7 +24,7 @@ export default class MoleView extends React.Component {
       <button className={className} type="button" onClick={this.props.onClick}>
         <span className="mole__inner">
           <span role="img" aria-label="Mole">
-            🎈
+            {this.props.icon}
           </span>
         </span>
       </button>

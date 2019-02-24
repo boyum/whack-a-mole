@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import MoleView from './mole';
+import GameTimer from './game-timer';
+import GameScore from './game-score';
 
 import { GameStates } from '../store/actions';
 
@@ -16,12 +18,17 @@ export default class Game extends React.Component {
     spawnMole: PropTypes.func.isRequired,
     resetExpiredMoles: PropTypes.func.isRequired,
     gameState: PropTypes.string.isRequired,
-    onResetClick: PropTypes.func.isRequired,
+    onRestartClick: PropTypes.func.isRequired,
     onPauseClick: PropTypes.func.isRequired,
     onStartClick: PropTypes.func.isRequired,
     spawnRate: PropTypes.number.isRequired,
     setSpawnRate: PropTypes.func.isRequired,
-    gameScore: PropTypes.number.isRequired
+    maxLifeTime: PropTypes.number.isRequired,
+    setMaxLifeTime: PropTypes.func.isRequired,
+    gameScore: PropTypes.number.isRequired,
+    onGameOver: PropTypes.func.isRequired,
+    timeWhenGameIsOver: PropTypes.number.isRequired,
+    setTimeWhenGameIsOver: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -32,11 +39,18 @@ export default class Game extends React.Component {
   }
 
   init() {
-    this.props.setSpawnRate(1500);
+    this.props.setSpawnRate(1);
 
     const doGameTick = () => {
+      const gameIsPaused = this.props.gameState === GameStates.PAUSED;
+
+      if (gameIsPaused) {
+        return;
+      }
+
       this.spawnMole();
       this.props.resetExpiredMoles(Date.now());
+      this.checkIfGameOver();
 
       requestAnimationFrame(doGameTick);
     };
@@ -46,14 +60,23 @@ export default class Game extends React.Component {
 
   spawnMole() {
     const shouldSpawnMole =
-      Math.random() < 0.01 && this.props.gameState === GameStates.RUNNING;
+      Math.random() < this.props.spawnRate * 0.015 &&
+      this.props.gameState === GameStates.RUNNING;
 
     if (shouldSpawnMole) {
       const numberOfMoles = this.props.moles.length;
       const randomMoleIndex = Math.floor(Math.random() * numberOfMoles);
-      const aliveUntil = Date.now() + this.props.spawnRate;
+      const aliveUntil = Date.now() + this.props.maxLifeTime;
 
       this.props.spawnMole(randomMoleIndex, aliveUntil);
+    }
+  }
+
+  checkIfGameOver() {
+    const gameIsOver = this.props.timeWhenGameIsOver < Date.now();
+
+    if (gameIsOver) {
+      this.props.onGameOver();
     }
   }
 
@@ -61,6 +84,7 @@ export default class Game extends React.Component {
     const onClick = (index, isAlive) => {
       if (isAlive) {
         this.props.onMoleClick(index, this.props.gameScore + 1);
+        this.props.setTimeWhenGameIsOver(this.props.timeWhenGameIsOver + 500);
       }
     };
     return this.props.moles.map((mole, index) => (
@@ -69,6 +93,7 @@ export default class Game extends React.Component {
         onClick={onClick.bind(null, index, mole.isAlive)}
         {...mole}
         isAlive={mole.isAlive}
+        icon={mole.activeIcon}
       />
     ));
   }
@@ -80,7 +105,12 @@ export default class Game extends React.Component {
   render() {
     return (
       <div className={this.getGameClassName()}>
-        <div className="score">Score: {this.props.gameScore}</div>
+        <GameTimer
+          timeLeft={Math.floor(
+            (this.props.timeWhenGameIsOver - Date.now()) / 1000
+          )}
+          maxTime={20}
+        />
         <button
           type="button"
           className="start-button"
@@ -97,12 +127,13 @@ export default class Game extends React.Component {
         </button>
         <button
           type="button"
-          className="reset-button"
-          onClick={this.props.onResetClick}
+          className="restart-button"
+          onClick={this.props.onRestartClick.bind(null, Date.now() + 20 * 1000)}
         >
-          Reset
+          Restart
         </button>
         <div className="moles">{this.renderMoles()}</div>
+        <GameScore score={this.props.gameScore} />
       </div>
     );
   }

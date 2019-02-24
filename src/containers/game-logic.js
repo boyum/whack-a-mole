@@ -1,14 +1,18 @@
 import { connect } from 'react-redux';
 
 import {
+  GameStates,
+  MoleIcons,
   spawnMole,
   whackMole,
   resetAllMoles,
-  GameStates,
   setGameState,
   resetExpiredMoles,
   setSpawnRate,
-  setGameScore
+  setGameScore,
+  setMaxLifeTime,
+  setTimeWhenGameIsOver,
+  setMoleActiveIcon
 } from '../store/actions';
 import Game from '../components/game';
 
@@ -18,35 +22,50 @@ const mapStateToProps = state => {
     gameState: state.gameState,
     pauseButtonText: state.pauseButtonText,
     spawnRate: state.spawnRate,
-    gameScore: state.gameScore
+    gameScore: state.gameScore,
+    maxLifeTime: state.maxLifeTime,
+    timeWhenGameIsOver: state.timeWhenGameIsOver
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     onMoleClick: (index, gameScore) => {
+      dispatch(setMoleActiveIcon(MoleIcons.WHACKED, index));
       dispatch(whackMole(index));
       dispatch(setGameScore(gameScore));
     },
-    spawnMole: (randomMoleIndex, aliveUntil) => {
-      dispatch(spawnMole(randomMoleIndex, aliveUntil));
+    spawnMole: (index, aliveUntil) => {
+      dispatch(setMoleActiveIcon(MoleIcons.DEFAULT, index));
+      dispatch(spawnMole(index, aliveUntil));
     },
     resetExpiredMoles: currentTimeInMills => {
       dispatch(resetExpiredMoles(currentTimeInMills));
     },
-    onResetClick: () => {
-      dispatch(setGameState(GameStates.PRE_START));
+    onRestartClick: timeWhenGameIsOver => {
       dispatch(resetAllMoles());
       dispatch(setGameScore(0));
+      dispatch(setTimeWhenGameIsOver(timeWhenGameIsOver));
+      dispatch(setGameState(GameStates.RUNNING));
     },
     onPauseClick: () => {
       dispatch(setGameState(GameStates.PAUSED));
     },
-    onStartClick: () => {
+    onStartClick: timeWhenGameIsOver => {
       dispatch(setGameState(GameStates.RUNNING));
+    },
+    onGameOver: () => {
+      dispatch(resetAllMoles());
+      dispatch(setGameState(GameStates.GAME_OVER));
     },
     setSpawnRate: spawnRate => {
       dispatch(setSpawnRate(spawnRate));
+    },
+    setMaxLifeTime: maxLifeTime => {
+      dispatch(setMaxLifeTime(maxLifeTime));
+    },
+    setTimeWhenGameIsOver: timeWhenGameIsOver => {
+      dispatch(setTimeWhenGameIsOver(timeWhenGameIsOver));
     }
   };
 };
