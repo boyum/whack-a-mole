@@ -12,6 +12,7 @@ export const SET_MAX_LIFE_TIME = 'SET_MAX_LIFE_TIME';
 
 export const SET_GAME_SCORE = 'SET_GAME_SCORE';
 export const SET_TIME_WHEN_GAME_IS_OVER = 'SET_TIME_WHEN_GAME_IS_OVER';
+export const SET_MAX_MOLES_ALIVE = 'SET_MAX_MOLES_ALIVE';
 
 export const GameStates = {
   RUNNING: 'RUNNING',
@@ -93,5 +94,12 @@ export function setTimeWhenGameIsOver(timeWhenGameIsOver) {
   return {
     type: SET_TIME_WHEN_GAME_IS_OVER,
     timeWhenGameIsOver
+  };
+}
+
+export function setMaxMolesAlive(maxMolesAlive) {
+  return {
+    type: SET_MAX_MOLES_ALIVE,
+    maxMolesAlive
   };
 }

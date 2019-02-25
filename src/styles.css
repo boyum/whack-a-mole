@@ -64,6 +64,10 @@ body {
   visibility: hidden;
 }
 
+.game-timer__container--intense .game-timer__inner {
+  animation: pulse 1s ease-in-out infinite;
+}
+
 .game-timer__inner {
   background-color: teal;
   height: 1rem;
@@ -75,4 +79,10 @@ body {
 .score {
   margin-top: 1rem;
   text-align: center;
+}
+
+@keyframes pulse {
+  50% {
+    background-color: tomato;
+  }
 }

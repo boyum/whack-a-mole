@@ -19,12 +19,20 @@ export default class GameTime extends React.Component {
       return null;
     }
 
+    const scale = this.props.timeLeft / this.props.maxTime;
+
+    let containerClassName = 'game-timer__container';
+    const timeIsNearlyOver = scale < 0.25;
+    if (timeIsNearlyOver) {
+      containerClassName += ' game-timer__container--intense';
+    }
+
     return (
-      <div className="game-timer__container">
+      <div className={containerClassName}>
         <div
           className="game-timer__inner"
           style={{
-            transform: `scaleX(${this.props.timeLeft / this.props.maxTime})`
+            transform: `scaleX(${scale})`
           }}
         />
       </div>

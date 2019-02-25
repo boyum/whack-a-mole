@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import MoleView from './mole';
-import GameTimer from './game-timer';
-import GameScore from './game-score';
+import MoleView from "./mole";
+import GameTimer from "./game-timer";
+import GameScore from "./game-score";
 
-import { GameStates } from '../store/actions';
+import { GameStates } from "../store/actions";
 
 export default class Game extends React.Component {
   static propTypes = {
@@ -28,7 +28,9 @@ export default class Game extends React.Component {
     gameScore: PropTypes.number.isRequired,
     onGameOver: PropTypes.func.isRequired,
     timeWhenGameIsOver: PropTypes.number.isRequired,
-    setTimeWhenGameIsOver: PropTypes.func.isRequired
+    setTimeWhenGameIsOver: PropTypes.func.isRequired,
+    maxMolesAlive: PropTypes.number.isRequired,
+    setMaxMolesAlive: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -60,8 +62,9 @@ export default class Game extends React.Component {
 
   spawnMole() {
     const shouldSpawnMole =
-      Math.random() < this.props.spawnRate * 0.015 &&
-      this.props.gameState === GameStates.RUNNING;
+      Math.random() < this.props.spawnRate * 0.05 &&
+      this.props.gameState === GameStates.RUNNING &&
+      this.numberOfMolesAlive() < this.props.maxMolesAlive;
 
     if (shouldSpawnMole) {
       const numberOfMoles = this.props.moles.length;
@@ -70,6 +73,14 @@ export default class Game extends React.Component {
 
       this.props.spawnMole(randomMoleIndex, aliveUntil);
     }
+  }
+
+  numberOfMolesAlive() {
+    let numberOfMolesAlive = 0;
+
+    this.props.moles.map(mole => (numberOfMolesAlive += mole.isAlive));
+
+    return numberOfMolesAlive;
   }
 
   checkIfGameOver() {
@@ -84,12 +95,12 @@ export default class Game extends React.Component {
     const onClick = (index, isAlive) => {
       if (isAlive) {
         this.props.onMoleClick(index, this.props.gameScore + 1);
-        this.props.setTimeWhenGameIsOver(this.props.timeWhenGameIsOver + 500);
+        this.props.setTimeWhenGameIsOver(this.props.timeWhenGameIsOver + 250);
       }
     };
     return this.props.moles.map((mole, index) => (
       <MoleView
-        key={'mole-' + index}
+        key={"mole-" + index}
         onClick={onClick.bind(null, index, mole.isAlive)}
         {...mole}
         isAlive={mole.isAlive}

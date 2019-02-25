@@ -12,7 +12,8 @@ import {
   setGameScore,
   setMaxLifeTime,
   setTimeWhenGameIsOver,
-  setMoleActiveIcon
+  setMoleActiveIcon,
+  setMaxMolesAlive
 } from '../store/actions';
 import Game from '../components/game';
 
@@ -24,7 +25,8 @@ const mapStateToProps = state => {
     spawnRate: state.spawnRate,
     gameScore: state.gameScore,
     maxLifeTime: state.maxLifeTime,
-    timeWhenGameIsOver: state.timeWhenGameIsOver
+    timeWhenGameIsOver: state.timeWhenGameIsOver,
+    maxMolesAlive: state.maxMolesAlive
   };
 };
 
@@ -66,6 +68,9 @@ const mapDispatchToProps = dispatch => {
     },
     setTimeWhenGameIsOver: timeWhenGameIsOver => {
       dispatch(setTimeWhenGameIsOver(timeWhenGameIsOver));
+    },
+    setMaxMolesAlive: maxMolesAlive => {
+      dispatch(setMaxMolesAlive(maxMolesAlive));
     }
   };
 };

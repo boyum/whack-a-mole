@@ -11,7 +11,8 @@ import {
   SET_GAME_SCORE,
   SET_MAX_LIFE_TIME,
   SET_TIME_WHEN_GAME_IS_OVER,
-  SET_MOLE_ACTIVE_ICON
+  SET_MOLE_ACTIVE_ICON,
+  SET_MAX_MOLES_ALIVE
 } from './actions';
 
 import Mole from '../models/mole';
@@ -140,13 +141,23 @@ function timeWhenGameIsOver(state = 0, action) {
   }
 }
 
+function maxMolesAlive(state = 3, action) {
+  switch (action.type) {
+    case SET_MAX_MOLES_ALIVE:
+      return action.maxMolesAlive;
+    default:
+      return state;
+  }
+}
+
 const WhackAMoleGame = combineReducers({
   gameState,
   moles,
   spawnRate,
   gameScore,
   maxLifeTime,
-  timeWhenGameIsOver
+  timeWhenGameIsOver,
+  maxMolesAlive
 });
 
 export default WhackAMoleGame;
